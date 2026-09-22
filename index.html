@@ -297,17 +297,12 @@
     };
     const line = (x1, y1, x2, y2, w) => { g.lineWidth = w || 0.8; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
 
-    text("年　　月　　日", Rt, 70, 11, false, "right");
-    text(COVER.title, W / 2, 120, 22, true, "center");
-    line(L, 136, Rt, 136, 1.5);
-
-    text("お客様名", L, 186, 12, false);
-    line(L + 64, 190, Rt - 30, 190);
-    text("様", Rt, 186, 12, false, "right");
-    text(COVER.message, L, 230, 11, false);
+    text(COVER.title, W / 2, 100, 22, true, "center");
+    line(L, 116, Rt, 116, 1.5);
+    text(COVER.message, L, 156, 11, false);
 
     // 表
-    let y = 262;
+    let y = 190;
     const rowH = 40;
     text("確認", L + 14, y, 10, true, "center");
     text("書類", L + 44, y, 10, true);
