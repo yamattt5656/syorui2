@@ -20,6 +20,17 @@ const COVER = {
 
 const SECTIONS = [
   {
+    title: "役所などで取得",
+    obtain: true,       // お客様が取得する書類（印刷はせず、返送リストにだけ載せる）
+    items: [
+      { name: "印鑑証明書" },
+      { name: "住民票" },
+      { name: "戸籍の附票" },
+      { name: "戸籍の除票" },
+      { name: "戸籍謄本" },
+    ],
+  },
+  {
     title: "書類",
     items: [
       { name: "委任状",                   file: "委任状.pdf" },
@@ -28,6 +39,7 @@ const SECTIONS = [
       { name: "自認書",                   file: "自認書.pdf" },
       { name: "配置図",                   file: "配置図.pdf" },
       { name: "保管場所使用承諾証明書",   file: "保管場所使用承諾証明書.pdf" },
+      { name: "所有権解除依頼書",         file: "所有権解除依頼書.pdf" },
     ],
   },
   {

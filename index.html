@@ -167,13 +167,14 @@
     items.push({
       id: si + "-" + ii, sec: sec.title, name: it.name, file: it.file, on: false, copies: 1,
       inList: sec.checklist !== false,
+      obtain: !!sec.obtain,
       listName: sec.listName ? sec.listName.replace("{name}", it.name) : it.name,
     })));
   const byId = (id) => items.find((x) => x.id === id);
 
   // ---------- 表示 ----------
   function itemHtml(x) {
-    if (!x.file) {
+    if (!x.file && !x.obtain) {
       return `<div class="item none" data-id="${x.id}">
         <span class="mark"></span>
         <div><div class="name">${esc(x.name)}</div><div class="sub">未登録</div></div><span></span></div>`;
@@ -187,7 +188,7 @@
           <output>${x.copies}部</output>
           <button data-act="plus" aria-label="部数を増やす" ${x.copies >= 20 ? "disabled" : ""}>＋</button>
         </div>
-        <button class="one" data-act="print">印刷</button>
+        ${x.obtain ? "" : `<button class="one" data-act="print">印刷</button>`}
       </div>
     </div>`;
   }
@@ -277,7 +278,12 @@
       if (ans === "yes") rows.push({ name: COVER.garageItem, copies: 1 });
       if (rows.length) cover = rows;
     }
-    printItems(list, cover);
+    const docs = list.filter((x) => !x.obtain);   // 役所で取得する書類は印刷しない
+    if (!docs.length && !cover) {
+      toast("印刷する書類がありません。役所などで取得する書類は、頭紙をつけると返送リストに載ります。", true);
+      return;
+    }
+    printItems(docs, cover);
   }
 
   // A4縦の頭紙を画像として描く（日本語フォントをPDFに埋め込まずに済むため）
@@ -383,7 +389,7 @@
         }
       }
     }
-    if (!added) throw new Error(`${missing.join("、")} が見つかりません。GitHubにこのファイルがあるか確認してください。`);
+    if (!added && !cover) throw new Error(`${missing.join("、")} が見つかりません。GitHubにこのファイルがあるか確認してください。`);
     return { blob: new Blob([await out.save()], { type: "application/pdf" }), missing };
   }
 
