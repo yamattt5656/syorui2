@@ -145,8 +145,8 @@
 <dialog id="ask" aria-labelledby="askText">
   <p id="askText">車庫証明はお客様出しですか？</p>
   <div class="ask-btns">
-    <button value="no" class="ask-no">いいえ</button>
     <button value="yes" class="ask-yes">はい</button>
+    <button value="no" class="ask-no">いいえ</button>
   </div>
   <button value="cancel" class="ask-x" aria-label="印刷をやめる">×</button>
 </dialog>
@@ -168,7 +168,7 @@
       id: si + "-" + ii, sec: sec.title, name: it.name, file: it.file, on: false, copies: 1,
       inList: sec.checklist !== false,
       obtain: !!sec.obtain,
-      listName: sec.listName ? sec.listName.replace("{name}", it.name) : it.name,
+      listName: it.listName || (sec.listName ? sec.listName.replace("{name}", it.name) : it.name),
     })));
   const byId = (id) => items.find((x) => x.id === id);
 
@@ -274,7 +274,10 @@
     if ($("#cover").checked) {
       const ans = await askGarage();
       if (ans === "cancel") return;
-      const rows = list.filter((x) => x.inList).map((x) => ({ name: x.listName, copies: x.copies }));
+      const hide = ans === "yes" ? (COVER.garageHide || []) : [];
+      const rows = list
+        .filter((x) => x.inList && !hide.includes(x.name))
+        .map((x) => ({ name: x.listName, copies: x.copies }));
       if (ans === "yes") rows.push({ name: COVER.garageItem, copies: 1 });
       if (rows.length) cover = rows;
     }
